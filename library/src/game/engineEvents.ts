@@ -173,6 +173,15 @@ export const EE_OnPerfHUDUpdate = 'perfhud.update';
 regMap[EE_OnPerfHUDUpdate] = 'onPerfHUDUpdate';
 
 /**
+ * Called to load mods.
+ *
+ * @param {string} manifests A JSON string containing an array of mod manifests provided in the order in which they
+ * should be loaded.
+ */
+export const EE_OnLoadMods = 'loadMods';
+regMap[EE_OnLoadMods] = 'onLoadMods';
+
+/**
  * Initialize engine event forwarding
  */
 export default function() {

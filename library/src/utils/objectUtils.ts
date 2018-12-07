@@ -13,6 +13,10 @@ declare global {
     [id: string]: T;
   }
 
+  interface JSON {
+    tryParse<T>(json: string, logError?: boolean): T;
+  }
+
   function clone<T>(source: T): T;
   function cloneDeep<T>(source: T): T;
   function merge<T>(source: T, ...args: any[]): T;
@@ -85,3 +89,5 @@ window.tryParseJSON = function<T>(json: string, logError: boolean = false): T {
     return null;
   }
 };
+
+JSON.tryParse = tryParseJSON;

@@ -7,20 +7,17 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
-import { ErrorBoundary } from '@csegames/camelot-unchained/lib/components/ErrorBoundary';
 import { hot } from 'react-hot-loader';
 
 import DragStore from '../DragAndDrop/DragStore';
 import {
   LayoutState,
-  setPosition,
   initialize,
   setVisibility,
   Widget,
 } from '../../services/session/layout';
 import { InvitesState, initializeInvites } from '../../services/session/invites';
 import { SessionState } from '../../services/session/reducer';
-import HUDDrag, { HUDDragState, HUDDragOptions } from '../HUDDrag';
 import Watermark from '../Watermark';
 import { LoadingScreen } from '../LoadingScreen';
 import { OfflineZoneSelect } from '../OfflineZoneSelect';
@@ -42,6 +39,7 @@ import { ContextMenu } from '../ContextMenu';
 import { TooltipView } from 'UI/Tooltip';
 import PassiveAlert from '../PassiveAlert';
 import { HUDContext, HUDContextState, defaultContextState, fetchSkills, fetchStatuses } from './context';
+import { HUDWidgets } from './HUDWidgets';
 
 const HUDNavContainer = styled('div')`
   position: fixed;
@@ -97,15 +95,10 @@ class HUD extends React.Component<HUDProps, HUDState> {
   public render() {
     const widgets = this.props.layout.widgets.map((widget, name) => ({ widget, name })).toArray();
     const locked = this.props.layout.locked;
-    const renderWidgets = widgets
-                    .sort((a, b) => a.widget.position.zOrder - b.widget.position.zOrder)
-                    .map((w, idx) =>
-                      this.draggable(w.name, w.widget, w.widget.component, w.widget.dragOptions, w.widget.props));
-
     return (
       <HUDContext.Provider value={this.state}>
         <div className='HUD' style={locked ? {} : { backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
-          {renderWidgets}
+          <HUDWidgets />
           <DragStore />
           <ZoneNameContainer>
             <ZoneName />
@@ -205,58 +198,6 @@ class HUD extends React.Component<HUDProps, HUDState> {
 
   private setVisibility = (widgetName: string, vis: boolean) => {
     this.props.dispatch(setVisibility({ name: widgetName, visibility: vis }));
-  }
-
-  private draggable = (type: string, widget: Widget<any>, Widget: any, options?: HUDDragOptions, widgetProps?: any) => {
-    let props = widgetProps;
-    if (typeof props === 'function') {
-      props = props();
-    }
-    return (
-      <ErrorBoundary key={widget.position.zOrder}>
-        <HUDDrag
-          name={type}
-          defaultHeight={widget.position.size.height}
-          defaultWidth={widget.position.size.width}
-          defaultScale={widget.position.scale}
-          defaultX={widget.position.x.offset}
-          defaultY={widget.position.y.offset}
-          defaultXAnchor={widget.position.x.anchor}
-          defaultYAnchor={widget.position.y.anchor}
-          defaultOpacity={widget.position.opacity}
-          defaultMode={widget.position.layoutMode}
-          defaultVisible={widget.position.visibility}
-          zOrder={widget.position.zOrder}
-          gridDivisions={10}
-          locked={this.props.layout.locked}
-          selected={this.state.selectedWidget && this.state.selectedWidget.name === type}
-          save={(s: HUDDragState) => {
-            this.props.dispatch(setPosition({
-              name: type,
-              widget,
-              position: {
-                x: { anchor: s.xAnchor, offset: s.x },
-                y: { anchor: s.yAnchor, offset: s.y },
-                size: { width: s.width, height: s.height },
-                scale: s.scale,
-                opacity: s.opacity,
-                visibility: s.visible,
-                zOrder: widget.position.zOrder,
-                layoutMode: widget.position.layoutMode,
-              },
-            }));
-          }}
-          render={() => {
-            if (this.props.layout.locked && !widget.position.visibility) return null;
-            return <Widget
-              setVisibility={(vis: boolean) => this.props.dispatch(setVisibility({ name: type, visibility: vis }))}
-              {...props}
-            />;
-          }}
-          {...options}
-        />
-      </ErrorBoundary>
-    );
   }
 
 }

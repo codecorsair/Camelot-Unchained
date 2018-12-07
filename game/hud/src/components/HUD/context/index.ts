@@ -10,6 +10,9 @@ import { query } from '@csegames/camelot-unchained/lib/graphql/query';
 import { useConfig } from '@csegames/camelot-unchained/lib/graphql/react';
 import { StatusDef, Skill, CUQuery } from 'gql/interfaces';
 
+import './layout';
+export * from './layout';
+
 export const HUDGraphQLQueryConfig = () => ({
   url: game.webAPIHost + '/graphql',
   requestOptions: {
@@ -43,6 +46,11 @@ export interface HUDGraphQLQueryResult<T> {
 export interface HUDContextState {
   statuses: HUDGraphQLQueryResult<StatusDef[]>;
   skills: HUDGraphQLQueryResult<Skill[]>;
+  widgets: ObjectMap<HUDWidget>;
+  hudEditor: {
+    active: boolean;
+    selectedWidgetKey: string;
+  };
 }
 
 const defaultQueryResultInfo = {
@@ -59,6 +67,11 @@ export const defaultContextState: HUDContextState = {
   skills: {
     ...defaultQueryResultInfo,
     data: [],
+  },
+  widgets: {},
+  hudEditor: {
+    active: false,
+    selectedWidgetKey: '',
   },
 };
 
@@ -119,3 +132,4 @@ export async function fetchStatuses() {
     refetch: fetchStatuses,
   };
 }
+

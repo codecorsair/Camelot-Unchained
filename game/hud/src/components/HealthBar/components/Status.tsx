@@ -8,7 +8,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import styled from 'react-emotion';
-import { HUDContext, HUDGraphQLQueryResult } from 'HUDContext';
+import { HUDContext, HUDGraphQLQueryResult } from 'components/HUD/context';
 import StatusIcon from './StatusIcon';
 import { StatusDef } from 'gql/interfaces';
 

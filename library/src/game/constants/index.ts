@@ -12,6 +12,7 @@ import './CombatEvent';
 import './DamageType';
 import './ItemPlacementTransformMode';
 import './Keybind';
+import './ModManifest';
 import './Options';
 import './ResourceKind';
 import './Screenshot';

@@ -7,7 +7,7 @@
 
 import * as React from 'react';
 import { findIndex, isEmpty } from 'lodash';
-import { HUDContext, HUDGraphQLQueryResult } from 'HUDContext';
+import { HUDContext, HUDGraphQLQueryResult } from 'components/HUD/context';
 
 import { ApiAbilityInfo } from '../AbilityBar';
 import { AbilityButtonInfo } from '../AbilityBar/AbilityButton/AbilityButtonView';

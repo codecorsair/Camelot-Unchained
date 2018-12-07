@@ -429,6 +429,12 @@ export interface GameInterface extends GameModel {
 
   onPerfHUDUpdate: (callback: (json: string) => any) => EventHandle;
 
+
+  /**
+   * Called to load Mods, will only ever be fired once. Enabling new mods will require a UI reload.
+   */
+  onLoadMods: (callback: (manifests: string) => any) => EventHandle;
+
   getKeybindSafe: (id: number) => Keybind;
 
   /* -------------------------------------------------- */
